@@ -106,7 +106,12 @@ int SDL20VideoDriver::Init()
 int SDL20VideoDriver::CreateSDLDisplay(const char* title)
 {
 	Log(MESSAGE, "SDL 2 Driver", "Creating display");
+#if !USE_OPENGL_BACKEND && defined(__linux__)
+	// on linux, the default gemrb package doesn't use OpenGL, so lower the scale quality to avoid blurry rendering.
+	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "0");
+#else
 	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "best");
+#endif
 
 #if USE_OPENGL_BACKEND
 #if USE_OPENGL_API
